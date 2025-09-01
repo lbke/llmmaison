@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ai-sdk/mistral": "^2.0.12",
+    "@astrojs/vercel": "^8.2.7",
     "@tailwindcss/vite": "^4.1.12",
     "ai": "^5.0.28",
     "astro": "^5.13.5",
