@@ -1,0 +1,23 @@
+---
+export interface Props {
+  field: string;
+  label: string;
+  value: string;
+}
+
+const { field, label, value } = Astro.props;
+
+// Don't render if value is empty or just whitespace
+if (!value || value.trim() === '') {
+  return null;
+}
+---
+
+<div class="mb-6">
+  <dt class="text-sm font-medium text-gray-500 mb-2">
+    {label}
+  </dt>
+  <dd class="text-gray-900 prose prose-sm max-w-none">
+    {value}
+  </dd>
+</div>

@@ -1,0 +1,128 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+}
+
+const {
+  title,
+  description = "Découvrez les installations LLM de la communauté française. Matériel, logiciels, coûts et performances détaillés.",
+  ogTitle,
+  ogDescription,
+} = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={canonicalURL + "/img/og.png"} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={ogTitle || title} />
+    <meta property="og:description" content={ogDescription || description} />
+    <meta property="og:site_name" content="LLM Maison 2025" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={ogTitle || title} />
+    <meta
+      property="twitter:description"
+      content={ogDescription || description}
+    />
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <header class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center">
+            <a href="/" class="text-2xl font-bold text-blue-600">
+              LLM Maison 2025
+            </a>
+          </div>
+          <div
+            class="flex-col md:flew-row flex items-center gap-2 md:gap-4 text-xs text-center md:text-base"
+          >
+            <a
+              href="https://forms.gle/fdvdKHNFPefLySnU6"
+              target="_blank"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-2 md:px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              Participez à l'enquête
+            </a>
+            <a
+              href="/data/processed/enriched-data.csv"
+              class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 md:px-4 py-2 rounded-lg font-medium transition-colors"
+            >
+              Téléchargez les données
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="min-h-screen">
+      <slot />
+    </main>
+
+    <footer class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-4">
+              L'Agence LLM 2025 - Projet LLM Maison
+            </h3>
+            <p class="text-gray-300">
+              Pour toute question concernant vos données :
+              <a
+                href="mailto:contact@agencellm.fr"
+                class="text-blue-400 hover:text-blue-300"
+              >
+                contact@agencellm.fr
+              </a>
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Contribuer</h3>
+            <p class="text-gray-300 mb-2">
+              Contribuez au projet en répondant au questionnaire 2025
+            </p>
+            <a
+              href="https://forms.gle/fdvdKHNFPefLySnU6"
+              target="_blank"
+              class="text-blue-400 hover:text-blue-300 underline"
+            >
+              Répondre au questionnaire
+            </a>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Licence & Crédits</h3>
+            <p class="text-gray-300 mb-2">
+              Les données sont sous licence CC-0 - Aucune attribution requise,
+              usages commerciaux et non commerciaux autorisés.
+            </p>
+            <p class="text-gray-400 text-sm">
+              Un site web vibe codé avec Bolt.new
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

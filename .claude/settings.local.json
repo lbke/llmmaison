@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npx astro add tailwind:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run parse:*)",
+      "Bash(cp:*)",
+      "Bash(npm run build:*)",
+      "Bash(touch:*)",
+      "Bash(timeout 10 npm run dev:*)"
+    ],
+    "deny": []
+  }
+}

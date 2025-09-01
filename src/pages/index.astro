@@ -1,0 +1,147 @@
+---
+import Layout from "../layouts/Layout.astro";
+import InstallationCard from "../components/InstallationCard.astro";
+import ContributeBanner from "../components/ContributeBanner.astro";
+import { getRandomInstallations } from "../utils/data.js";
+import { Image } from "astro:assets";
+import landingCover from "../assets/img/llm_jardin.png";
+
+const randomInstallations = getRandomInstallations(10);
+---
+
+<Layout
+  title="LLM Maison 2025 - Installations LLM de la communauté française"
+  description="Découvrez les installations LLM locales et cloud de la communauté française. Matériel, logiciels, coûts et performances partagés librement."
+>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="text-center lg:text-left">
+          <h1
+            class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6"
+          >
+            <span class="text-blue-600">LLM Maison</span><br />
+            2025
+          </h1>
+          <p class="text-xl text-gray-600 mb-8 max-w-2xl">
+            Découvrez comment la communauté française déploie et utilise les
+            modèles de langage. Installations locales, cloud, matériel et
+            retours d'expérience partagés librement sous licence Creative
+            Commons.
+          </p>
+        </div>
+        <div class="flex justify-center lg:justify-end">
+          <Image
+            src={landingCover}
+            alt="LLM Maison 2025"
+            class="max-w-full h-auto md:h-[900px] rounded-lg shadow-lg object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Text Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="prose prose-lg text-gray-700">
+          <p class="text-base leading-7">
+            Le projet LLM Maison 2025 collecte et partage les expériences de la
+            communauté française dans le déploiement et l'utilisation de modèles
+            de langage. Que vous utilisiez des solutions cloud, des
+            installations locales sur GPU ou même des configurations CPU, votre
+            expérience contribue à une meilleure compréhension de l'écosystème
+            LLM français.
+          </p>
+          <p class="text-base leading-7">
+            Cette initiative vise à documenter les choix technologiques, les
+            coûts, les performances et les usages réels des LLM dans différents
+            contextes : formation personnelle, recherche académique,
+            applications professionnelles ou expérimentations techniques.
+          </p>
+        </div>
+        <div class="text-2xl font-medium text-gray-800 leading-relaxed">
+          Une cartographie collaborative des installations LLM françaises pour
+          mieux comprendre les enjeux techniques, économiques et d'usage de l'IA
+          générative en 2025.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contribute Banner -->
+  <ContributeBanner />
+
+  <!-- Installations Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          Installations de la communauté
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Découvrez un échantillon des installations LLM partagées par la
+          communauté française. Chaque installation documente les choix
+          techniques, les performances et les coûts.
+        </p>
+      </div>
+
+      {
+        randomInstallations.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {randomInstallations.map((installation) => (
+              <InstallationCard installation={installation} />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+              <svg
+                class="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">
+              Aucune installation disponible
+            </h3>
+            <p class="text-gray-500 mb-6">
+              Les données sont en cours de traitement. Soyez le premier à
+              contribuer !
+            </p>
+            <a
+              href="https://forms.gle/fdvdKHNFPefLySnU6"
+              target="_blank"
+              class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+            >
+              Partager votre installation
+              <svg
+                class="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Layout>

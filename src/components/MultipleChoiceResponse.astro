@@ -1,0 +1,49 @@
+---
+export interface Props {
+  field: string;
+  label: string;
+  value: string;
+  options: string[];
+}
+
+const { field, label, value, options } = Astro.props;
+
+// Don't render if value is empty or just whitespace
+if (!value || value.trim() === '') {
+  return null;
+}
+
+// Parse multiple selections (assuming comma-separated)
+const selectedOptions = value.split(',').map(opt => opt.trim());
+---
+
+<div class="mb-6">
+  <dt class="text-sm font-medium text-gray-500 mb-2">
+    {label}
+  </dt>
+  <dd class="text-gray-900">
+    <div class="space-y-2">
+      {options.map((option) => {
+        const isSelected = selectedOptions.includes(option);
+        return (
+          <div class="flex items-center">
+            <div class={`w-4 h-4 rounded border-2 flex items-center justify-center mr-3 ${
+              isSelected 
+                ? 'border-blue-500 bg-blue-500' 
+                : 'border-gray-300'
+            }`}>
+              {isSelected && (
+                <svg class="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              )}
+            </div>
+            <span class={`text-sm ${isSelected ? 'font-medium text-blue-700' : 'text-gray-600'}`}>
+              {option}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  </dd>
+</div>
