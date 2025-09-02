@@ -1,4 +1,4 @@
-# LLM Maison 2025
+# LLM Maison 2025 🤖🏡
 
 Un site web Astro.js pour documenter et partager les installations LLM de la communauté française.
 
