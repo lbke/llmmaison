@@ -29,7 +29,10 @@ async function generateSeoTitle(data: ParsedData): Promise<string> {
 
 Le titre doit être accrocheur, inclure "LLM" et mentionner l'aspect communautaire/maison.
 
-Le résultat ne doit pas indiquer le nombre de caractères, ne renvoie que le titre.
+Le résultat ne doit pas indiquer le nombre de caractères, ne renvoie que le titre, sans guillemets.
+
+Exemple:
+La configuration locale de Mistral sur Dell d'Eric Burel
 `;
 
     const { text } = await generateText({
@@ -56,7 +59,7 @@ async function generateSeoDescription(data: ParsedData): Promise<string> {
 
 Décris l'installation de manière engageante et informative.
 
-Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que la description.
+Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que la description, sans guillemets.
 `;
 
     const { text } = await generateText({
@@ -75,13 +78,13 @@ Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que la descri
 async function generateH1Title(data: ParsedData): Promise<string> {
   try {
     const prompt = `Génère un titre H1 entre 60 et 80 caractères pour cette installation LLM :
-- Modèle: ${data.primaryModel}
-- Par: ${data.name}
-- Type: ${data.installLocation}
+- Modèle : ${data.primaryModel}
+- Par : ${data.name}
+- Type : ${data.installLocation}
 
 Le titre doit être descriptif et engageant, parfait pour une page de détail.
 
-Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que le titre.
+Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que le titre, sans guillemets.
 `;
 
     const { text } = await generateText({
@@ -94,8 +97,8 @@ Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que le titre.
     return title.length >= 60 && title.length <= 80
       ? title
       : title.length < 60
-      ? title.padEnd(60, " - Installation LLM Maison")
-      : title.substring(0, 80);
+        ? title.padEnd(60, " - Installation LLM Maison")
+        : title.substring(0, 80);
   } catch (error) {
     console.warn("❌ Failed to generate H1 title:", error);
     return DEFAULT_H1_TITLE;

@@ -1,49 +1,56 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import StringResponse from '../../components/StringResponse.astro';
-import SingleChoiceResponse from '../../components/SingleChoiceResponse.astro';
-import MultipleChoiceResponse from '../../components/MultipleChoiceResponse.astro';
-import InstallationCard from '../../components/InstallationCard.astro';
-import ContributeBanner from '../../components/ContributeBanner.astro';
-import { getInstallationBySlug, getAllSlugs, getRandomInstallations } from '../../utils/data.js';
+import Layout from "../../layouts/Layout.astro";
+import StringResponse from "../../components/StringResponse.astro";
+import SingleChoiceResponse from "../../components/SingleChoiceResponse.astro";
+import MultipleChoiceResponse from "../../components/MultipleChoiceResponse.astro";
+import InstallationCard from "../../components/InstallationCard.astro";
+import ContributeBanner from "../../components/ContributeBanner.astro";
+import {
+  getInstallationBySlug,
+  getAllSlugs,
+  getRandomInstallations,
+} from "../../utils/data.js";
 
 export async function getStaticPaths() {
   const slugs = getAllSlugs();
-  return slugs.map(slug => ({ params: { slug } }));
+  return slugs.map((slug) => ({ params: { slug } }));
 }
 
 const { slug } = Astro.params;
 const installation = getInstallationBySlug(slug as string);
 
 if (!installation) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 const randomInstallations = getRandomInstallations(10, slug as string);
 
+// Be careful that all options might not be listed here since the app was generated based on possible answers
+
 // Define options for choice components (you can expand these based on actual form options)
 const installLocationOptions = [
   "Directement sur ma machine",
-  "Sur un serveur local/réseau", 
+  "Sur un serveur local/réseau",
   "Chez un prestataire cloud",
-  "Hybride"
+  "Hybride",
 ];
 
 const professionalUseOptions = [
+  "Oui elle répond à des besoins professionnels concrets à mon échelle",
   "Oui elle est pleinement fonctionnelle",
-  "Partiellement elle nécessite encore du travail", 
+  "Partiellement elle nécessite encore du travail",
   "Non elle n'est pas vraiment fonctionnelle",
-  "Je ne sais pas"
+  "Je ne sais pas",
 ];
 
 const trainingOptions = [
   "Oui j'entraîne mes propres modèles",
   "Non, j'utilise des modèles existants",
-  "Les deux"
+  "Les deux",
 ];
 ---
 
-<Layout 
+<Layout
   title={installation.seoTitle}
   description={installation.seoDescription}
   ogTitle={installation.seoTitle}
@@ -52,33 +59,58 @@ const trainingOptions = [
   <!-- Header Banner -->
   <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      >
         <div class="flex-1">
           <div class="flex items-center text-sm opacity-90 mb-2">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Partagé le {new Date(installation.timestamp.split(' ')[0].split('/').reverse().join('-')).toLocaleDateString('fr-FR')}
+            Partagé le {
+              new Date(
+                installation.timestamp
+                  .split(" ")[0]
+                  .split("/")
+                  .reverse()
+                  .join("-")
+              ).toLocaleDateString("fr-FR")
+            }
           </div>
           <h1 class="text-2xl md:text-3xl font-bold mb-2">
-            {installation.h1Title || `Installation ${installation.primaryModel || 'LLM'} par ${installation.name || 'la communauté'}`}
+            {
+              installation.h1Title ||
+                `Installation ${installation.primaryModel || "LLM"} par ${installation.name || "la communauté"}`
+            }
           </h1>
           <div class="flex flex-col sm:flex-row gap-2 text-sm">
             <span class="opacity-90">
-              Par: {installation.name || 'Anonyme'}
+              Installation décrite par : {installation.name || "Anonyme"}
             </span>
-            {installation.website && (
-              <>
-                <span class="hidden sm:inline opacity-60">•</span>
-                <a 
-                  href={installation.website} 
-                  target="_blank" 
-                  class="text-blue-200 hover:text-white underline"
-                >
-                  Site web
-                </a>
-              </>
-            )}
+            {
+              installation.website && (
+                <>
+                  <span class="hidden sm:inline opacity-60">•</span>
+                  <a
+                    href={installation.website}
+                    rel="author"
+                    target="_blank"
+                    class="text-blue-200 hover:text-white underline"
+                  >
+                    Site web
+                  </a>
+                </>
+              )
+            }
           </div>
         </div>
       </div>
@@ -89,29 +121,30 @@ const trainingOptions = [
   <section class="py-12 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <dl class="space-y-8">
-        
         <!-- Installation Type & Models -->
         <div class="border-b border-gray-200 pb-8">
-          <h2 class="text-2xl font-semibold text-gray-900 mb-6">Configuration générale</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+            Configuration générale
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <SingleChoiceResponse 
-              field="installLocation" 
+            <SingleChoiceResponse
+              field="installLocation"
               label="Type d'installation"
               value={installation.installLocation}
               options={installLocationOptions}
             />
-            <StringResponse 
-              field="primaryModel" 
+            <StringResponse
+              field="primaryModel"
               label="Modèle LLM principal"
               value={installation.primaryModel}
             />
-            <StringResponse 
-              field="otherModels" 
+            <StringResponse
+              field="otherModels"
               label="Autres modèles utilisés"
               value={installation.otherModels}
             />
-            <SingleChoiceResponse 
-              field="trainsModels" 
+            <SingleChoiceResponse
+              field="trainsModels"
               label="Entraînement de modèles"
               value={installation.trainsModels}
               options={trainingOptions}
@@ -121,50 +154,52 @@ const trainingOptions = [
 
         <!-- Infrastructure & Hardware -->
         <div class="border-b border-gray-200 pb-8">
-          <h2 class="text-2xl font-semibold text-gray-900 mb-6">Infrastructure et matériel</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+            Infrastructure et matériel
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <StringResponse 
-              field="externalProvider" 
+            <StringResponse
+              field="externalProvider"
               label="Prestataire IT externe"
               value={installation.externalProvider}
             />
-            <StringResponse 
-              field="cloudProvider" 
+            <StringResponse
+              field="cloudProvider"
               label="Hébergeur cloud"
               value={installation.cloudProvider}
             />
-            <StringResponse 
-              field="providerDetails" 
+            <StringResponse
+              field="providerDetails"
               label="Précisions prestataire/hébergeur"
               value={installation.providerDetails}
             />
-            <StringResponse 
-              field="software" 
+            <StringResponse
+              field="software"
               label="Logiciels et SaaS utilisés"
               value={installation.software}
             />
-            <StringResponse 
-              field="hasGpu" 
+            <StringResponse
+              field="hasGpu"
               label="Cartes graphiques"
               value={installation.hasGpu}
             />
-            <StringResponse 
-              field="machineDetails" 
+            <StringResponse
+              field="machineDetails"
               label="Détails de la machine"
               value={installation.machineDetails}
             />
-            <StringResponse 
-              field="gpuDetails" 
+            <StringResponse
+              field="gpuDetails"
               label="Détails GPU et VRAM"
               value={installation.gpuDetails}
             />
-            <StringResponse 
-              field="rackDetails" 
+            <StringResponse
+              field="rackDetails"
               label="Rack/Serveurs"
               value={installation.rackDetails}
             />
-            <StringResponse 
-              field="hardwareDetails" 
+            <StringResponse
+              field="hardwareDetails"
               label="Autres précisions matériel"
               value={installation.hardwareDetails}
             />
@@ -173,25 +208,27 @@ const trainingOptions = [
 
         <!-- Usage & Performance -->
         <div class="border-b border-gray-200 pb-8">
-          <h2 class="text-2xl font-semibold text-gray-900 mb-6">Usage et performances</h2>
+          <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+            Usage et performances
+          </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <StringResponse 
-              field="installPurpose" 
+            <StringResponse
+              field="installPurpose"
               label="Utilisation de l'installation"
               value={installation.installPurpose}
             />
-            <StringResponse 
-              field="performance" 
+            <StringResponse
+              field="performance"
               label="Performances obtenues"
               value={installation.performance}
             />
-            <StringResponse 
-              field="installReason" 
+            <StringResponse
+              field="installReason"
               label="Raison de cette installation"
-              value={installation.installReason}
+              value={installation.installReason?.replaceAll(/;/g, " • ")}
             />
-            <SingleChoiceResponse 
-              field="professionalUse" 
+            <SingleChoiceResponse
+              field="professionalUse"
               label="Usage professionnel"
               value={installation.professionalUse}
               options={professionalUseOptions}
@@ -203,29 +240,31 @@ const trainingOptions = [
         <div class="border-b border-gray-200 pb-8">
           <h2 class="text-2xl font-semibold text-gray-900 mb-6">Coûts</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <StringResponse 
-              field="installCost" 
+            <StringResponse
+              field="installCost"
               label="Coût d'installation"
               value={installation.installCost}
             />
-            <StringResponse 
-              field="operationCost" 
+            <StringResponse
+              field="operationCost"
               label="Coût d'opération quotidien"
               value={installation.operationCost}
             />
-            <StringResponse 
-              field="costDetails" 
+            <StringResponse
+              field="costDetails"
               label="Précisions sur les coûts"
-              value={installation.costDetails}
+              value={installation.costDetails?.replaceAll(/\-/g, " • ")}
             />
           </div>
         </div>
 
         <!-- Additional Information -->
         <div>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-6">Informations complémentaires</h2>
-          <StringResponse 
-            field="additionalInfo" 
+          <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+            Informations complémentaires
+          </h2>
+          <StringResponse
+            field="additionalInfo"
             label="Autres informations partagées"
             value={installation.additionalInfo}
           />
@@ -252,24 +291,27 @@ const trainingOptions = [
   <ContributeBanner />
 
   <!-- More Installations -->
-  {randomInstallations.length > 0 && (
-    <section class="py-16 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
-            Autres installations de la communauté
-          </h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-            Découvrez d'autres configurations partagées par la communauté LLM française.
-          </p>
+  {
+    randomInstallations.length > 0 && (
+      <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+              Autres installations de la communauté
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+              Découvrez d'autres configurations partagées par la communauté LLM
+              française.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {randomInstallations.map((installation) => (
+              <InstallationCard installation={installation} />
+            ))}
+          </div>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {randomInstallations.map((installation) => (
-            <InstallationCard installation={installation} />
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
+      </section>
+    )
+  }
 </Layout>

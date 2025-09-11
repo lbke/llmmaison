@@ -9,9 +9,11 @@ export interface Props {
 const { field, label, value, options } = Astro.props;
 
 // Don't render if value is empty or just whitespace
-if (!value || value.trim() === '') {
+if (!value || value.trim() === "") {
   return null;
 }
+
+console.log({ field, label, value, options });
 ---
 
 <div class="mb-6">
@@ -20,22 +22,28 @@ if (!value || value.trim() === '') {
   </dt>
   <dd class="text-gray-900">
     <div class="space-y-2">
-      {options.map((option) => (
-        <div class="flex items-center">
-          <div class={`w-4 h-4 rounded-full border-2 flex items-center justify-center mr-3 ${
-            value === option 
-              ? 'border-blue-500 bg-blue-500' 
-              : 'border-gray-300'
-          }`}>
-            {value === option && (
-              <div class="w-2 h-2 rounded-full bg-white"></div>
-            )}
+      {
+        options.map((option) => (
+          <div class="flex items-center">
+            <div
+              class={`w-4 h-4 rounded-full border-2 flex items-center justify-center mr-3 ${
+                value === option
+                  ? "border-blue-500 bg-blue-500"
+                  : "border-gray-300"
+              }`}
+            >
+              {value === option && (
+                <div class="w-2 h-2 rounded-full bg-white" />
+              )}
+            </div>
+            <span
+              class={`text-sm ${value === option ? "font-medium text-blue-700" : "text-gray-600"}`}
+            >
+              {option}
+            </span>
           </div>
-          <span class={`text-sm ${value === option ? 'font-medium text-blue-700' : 'text-gray-600'}`}>
-            {option}
-          </span>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </dd>
 </div>

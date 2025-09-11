@@ -1,11 +1,49 @@
+/**
+ * First parsing step to have cleaner column names
+ * Note : will reparse all data
+ * Doesn't call AI yet (see enrich script)
+ */
 import { parse } from 'csv-parse/sync';
 import { readFileSync, writeFileSync } from 'fs';
 import { RawDataSchema, ParsedDataSchema, type RawData, type ParsedData } from '../schemas/data.js';
 
-function createSlug(timestamp: string): string {
-  const date = new Date(timestamp.split(' ')[0].split('/').reverse().join('-') + 'T' + timestamp.split(' ')[1]);
+/**
+ * Slug has to be deterministic so URLs are stable
+ * @param timestamp 
+ * @returns 
+ */
+function createSlug(timestamp: string, name?: string): string {
+  const [datePart, timePart, ampm, tz] = timestamp.split(' ');
+  const [year, month, day] = datePart.split('/').map(Number);
+  let [hour, minute, second] = timePart.split(':').map(Number);
+  if (ampm === 'PM' && hour < 12) hour += 12;
+  if (ampm === 'AM' && hour === 12) hour = 0;
+  const tzOffset = tz.match(/UTC([+-]\d+)/);
+  const offsetHours = tzOffset ? Number(tzOffset[1]) : 0;
+  const date = new Date(Date.UTC(year, month - 1, day, hour - offsetHours, minute, second));
+  // console.log(timestamp)
+  // const date = new Date(timestamp.split(' ')[0].split('/').reverse().join('-') + 'T' + timestamp.split(' ')[1]);
+  console.log(date)
   const isoString = date.toISOString();
-  return isoString.replace(/[:.]/g, '-').replace(/T/, '-').replace(/Z$/, '');
+  const beginning = isoString.split('Z')[0]
+  const dateSlug = beginning.replaceAll(/[:.]/g, '-').replace(/T/, '-');
+  let slug = dateSlug
+  if (name) {
+    const nameSlug = name.toLowerCase()
+      .replaceAll(/[éëêè]/g, "e")
+      // replace non char / non dash by dash
+      .replaceAll(/[^a-z0-9\-]/g, "-")
+      // remove the dupes dash that it may have created
+      .replaceAll(/\-\-+/g, "-")
+      // these days browser supports 2000+ chars, let's stick to a SEO title
+      .slice(0, 60)
+      // remove trailing dash if any
+      .replace(/\-$/, "")
+    if (nameSlug) {
+      slug = nameSlug + "-" + dateSlug
+    }
+  }
+  return slug
 }
 
 function transformRawToParsed(raw: RawData): ParsedData {
@@ -36,7 +74,7 @@ function transformRawToParsed(raw: RawData): ParsedData {
     website: raw["Site web que je souhaite mettre en avant"],
     name: raw["Prénom Nom et/ou nom de votre organisation"],
     additionalInfo: raw["Autres informations que vous souhaitez partager publiquement"],
-    slug: createSlug(raw["Horodateur"]),
+    slug: createSlug(raw["Horodateur"], raw["Prénom Nom et/ou nom de votre organisation"]),
   };
 }
 
@@ -68,7 +106,7 @@ export function parseCsv(inputPath: string, outputPath: string): void {
     ].join('\n');
 
     writeFileSync(outputPath, csvOutput);
-    
+
     console.log(`✅ Parsed ${parsedData.length} records`);
     console.log(`📁 Output saved to: ${outputPath}`);
   } catch (error) {
@@ -78,7 +116,7 @@ export function parseCsv(inputPath: string, outputPath: string): void {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const inputPath = process.argv[2] || './LLM Maison (réponses) - Réponses au formulaire 1.csv';
+  const inputPath = process.argv[2] || './data/raw/responses.csv';
   const outputPath = process.argv[3] || './data/processed/parsed-data.csv';
   parseCsv(inputPath, outputPath);
 }

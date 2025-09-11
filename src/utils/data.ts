@@ -11,7 +11,7 @@ export function loadEnrichedData(): EnrichedData[] {
   }
 
   try {
-    const csvContent = readFileSync('./data/processed/enriched-data.csv', 'utf-8');
+    const csvContent = readFileSync('./data/processed/latest/enriched-data.csv', 'utf-8');
     const records = parse(csvContent, {
       columns: true,
       skip_empty_lines: true,
@@ -31,7 +31,7 @@ export function loadParsedData(): ParsedData[] {
   }
 
   try {
-    const csvContent = readFileSync('./data/processed/parsed-data.csv', 'utf-8');
+    const csvContent = readFileSync('./data/processed/latest/parsed-data.csv', 'utf-8');
     const records = parse(csvContent, {
       columns: true,
       skip_empty_lines: true,
@@ -58,7 +58,7 @@ function loadParsedDataAsEnriched(): EnrichedData[] {
 export function getRandomInstallations(count: number = 10, exclude?: string): EnrichedData[] {
   const data = loadEnrichedData();
   const filtered = exclude ? data.filter(item => item.slug !== exclude) : data;
-  
+
   const shuffled = [...filtered].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, Math.min(count, shuffled.length));
 }

@@ -45,16 +45,30 @@ MISTRAL_API_KEY=votre_clé_mistral_ici
 ## Scripts de traitement des données
 
 ### 1. Parser les données brutes
+
+NOTE: le slug = l'URL de l'installation est calculé à cette étape de manière déterministe
+
 ```bash
-npm run parse
+npm run parse ./data/raw/$(date +%F).csv ./data/processed/$(date +%F)/parsed-data.csv
 ```
 Transforme le CSV brut en données avec des noms de champs propres et génère des slugs uniques.
 
 ### 2. Enrichir avec l'IA (optionnel)
+
+NOTE: déclenche un appel LLM sur chaque donnée (pour l'instant pas de mécanisme pour relancer le calcul sur les nouvelles données uniquement)
+
 ```bash
-npm run enrich
+npm run enrich ./data/processed/$(date +%F)/parsed-data.csv ./data/processed/$(date +%F)/enriched-data.csv
 ```
 Génère des titres SEO, descriptions et titres H1 optimisés avec Mistral AI.
+
+Si tout va bien copier vers le dossier latest : 
+
+```sh
+rm -Rf ./data/processed/latest ./public/data/latest
+cp -R "./data/processed/$(date +%F)" ./data/processed/latest
+cp -R "./data/processed/latest" ./public/data/latest
+```
 
 ## Développement
 
