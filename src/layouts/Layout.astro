@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import osezlia from "../assets/img/osezlia.png";
+import francenum from "../assets/img/activateur-francenum.webp";
 import "../styles/global.css";
 
 export interface Props {
@@ -87,8 +90,42 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
               Un projet open source porté par <a
                 href="https://www.agencellm.fr/"
                 class="underline decoration-dotted">L'Agence LLM</a
+              > et Eric Burel en tant qu'ambassadeur IA pour le programme <a
+                target="_blank"
+                href="https://www.economie.gouv.fr/actualites/osez-lia-un-plan-pour-diffuser-lia-dans-toutes-les-entreprises"
+                class="underline decoration-dotted">Osez l'IA.</a
               >
             </h3>
+            <div class="flex gap-8">
+              <a
+                target="_blank"
+                href="https://www.economie.gouv.fr/actualites/osez-lia-un-plan-pour-diffuser-lia-dans-toutes-les-entreprises"
+              >
+                <Image alt="Logo Osez-L'IA" src={osezlia} height={96} />
+              </a>
+              <a
+                target="_blank"
+                href="https://www.francenum.gouv.fr/activateurs/lbke"
+              >
+                <Image alt="Logo France Num" src={francenum} height={96} />
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Contribuer</h3>
+            <p class="text-gray-300 mb-2">
+              Contribuez au projet en répondant au questionnaire 2025
+            </p>
+            <p class="my-2">
+              <a
+                href="https://forms.gle/fdvdKHNFPefLySnU6"
+                target="_blank"
+                class="text-blue-400 hover:text-blue-300 underline"
+              >
+                Répondre au questionnaire
+              </a>
+            </p>
             <p class="text-gray-300">
               Pour toute question concernant vos données :
               <a
@@ -98,20 +135,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
                 contact@agencellm.fr
               </a>
             </p>
-          </div>
-
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Contribuer</h3>
-            <p class="text-gray-300 mb-2">
-              Contribuez au projet en répondant au questionnaire 2025
-            </p>
-            <a
-              href="https://forms.gle/fdvdKHNFPefLySnU6"
-              target="_blank"
-              class="text-blue-400 hover:text-blue-300 underline"
-            >
-              Répondre au questionnaire
-            </a>
           </div>
 
           <div>
