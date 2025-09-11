@@ -5,6 +5,22 @@ import { EnrichedDataSchema, type EnrichedData, type ParsedData, ParsedDataSchem
 let cachedData: EnrichedData[] | null = null;
 let cachedParsedData: ParsedData[] | null = null;
 
+/**
+ * 
+ * @param timestamp 2025/09/01 10:09:52 AM UTC+3
+ */
+export function parseTimestamp(timestamp: string) {
+  const [datePart, timePart, ampm, tz] = timestamp.split(' ');
+  const [year, month, day] = datePart.split('/').map(Number);
+  let [hour, minute, second] = timePart.split(':').map(Number);
+  if (ampm === 'PM' && hour < 12) hour += 12;
+  if (ampm === 'AM' && hour === 12) hour = 0;
+  const tzOffset = tz.match(/UTC([+-]\d+)/);
+  const offsetHours = tzOffset ? Number(tzOffset[1]) : 0;
+  const date = new Date(Date.UTC(year, month - 1, day, hour - offsetHours, minute, second));
+  return date
+}
+
 export function loadEnrichedData(): EnrichedData[] {
   if (cachedData) {
     return cachedData;

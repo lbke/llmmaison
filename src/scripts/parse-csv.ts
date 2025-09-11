@@ -8,11 +8,10 @@ import { readFileSync, writeFileSync } from 'fs';
 import { RawDataSchema, ParsedDataSchema, type RawData, type ParsedData } from '../schemas/data.js';
 
 /**
- * Slug has to be deterministic so URLs are stable
- * @param timestamp 
- * @returns 
+ * 
+ * @param timestamp 2025/09/01 10:09:52 AM UTC+3
  */
-function createSlug(timestamp: string, name?: string): string {
+function parseTimeStamp(timestamp: string) {
   const [datePart, timePart, ampm, tz] = timestamp.split(' ');
   const [year, month, day] = datePart.split('/').map(Number);
   let [hour, minute, second] = timePart.split(':').map(Number);
@@ -21,6 +20,15 @@ function createSlug(timestamp: string, name?: string): string {
   const tzOffset = tz.match(/UTC([+-]\d+)/);
   const offsetHours = tzOffset ? Number(tzOffset[1]) : 0;
   const date = new Date(Date.UTC(year, month - 1, day, hour - offsetHours, minute, second));
+  return date
+}
+/**
+ * Slug has to be deterministic so URLs are stable
+ * @param timestamp 
+ * @returns 
+ */
+function createSlug(timestamp: string, name?: string): string {
+  const date = parseTimeStamp(timestamp)
   // console.log(timestamp)
   // const date = new Date(timestamp.split(' ')[0].split('/').reverse().join('-') + 'T' + timestamp.split(' ')[1]);
   console.log(date)

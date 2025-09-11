@@ -9,6 +9,7 @@ import {
   getInstallationBySlug,
   getAllSlugs,
   getRandomInstallations,
+  parseTimestamp,
 } from "../../utils/data.js";
 
 export async function getStaticPaths() {
@@ -77,13 +78,7 @@ const trainingOptions = [
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Partagé le {
-              new Date(
-                installation.timestamp
-                  .split(" ")[0]
-                  .split("/")
-                  .reverse()
-                  .join("-")
-              ).toLocaleDateString("fr-FR")
+              parseTimestamp(installation.timestamp).toLocaleDateString("fr-FR")
             }
           </div>
           <h1 class="text-2xl md:text-3xl font-bold mb-2">
