@@ -60,9 +60,10 @@ export const ParsedDataSchema = z.object({
 });
 
 export const EnrichedDataSchema = ParsedDataSchema.extend({
-  seoTitle: z.string(),
-  seoDescription: z.string(),
+  seoTitle: z.string().max(60),
+  seoDescription: z.string().max(160),
   h1Title: z.string(),
+  aiDescription: z.string()
 });
 
 export type RawData = z.infer<typeof RawDataSchema>;

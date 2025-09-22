@@ -27,7 +27,7 @@ async function generateSeoTitle(data: ParsedData): Promise<string> {
 - Utilisation: ${data.installPurpose}
 - Organisation: ${data.name}
 
-Le titre doit être accrocheur, inclure "LLM" et mentionner l'aspect communautaire/maison.
+Le titre doit être factuel, inclure "LLM" et mentionner l'aspect communautaire, partage, installation maison.
 
 Le résultat ne doit pas indiquer le nombre de caractères, ne renvoie que le titre, sans guillemets.
 
@@ -57,7 +57,7 @@ async function generateSeoDescription(data: ParsedData): Promise<string> {
 - Logiciels: ${data.software}
 - Coûts: ${data.installCost}
 
-Décris l'installation de manière engageante et informative.
+Décris l'installation de manière engageante et informative, sans être trop commerciale.
 
 Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que la description, sans guillemets.
 `;
@@ -105,19 +105,52 @@ Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que le titre,
   }
 }
 
+async function generateFullDescription(data: ParsedData): Promise<string> {
+  try {
+    const prompt = `Génère une description de 2 paragraphes pour cette installation LLM.
+
+    <installation_llm>
+${JSON.stringify(data)}
+
+    </installation_llm>
+
+Décris l'installation de manière informative et factuelle, sans langage marketing ou commercial. Garde un ton neutre.
+
+Dans le premier paragraphe, décrit l'installation sur le plan technique.
+
+Dans le second paragraphe, décrit le résultat obtenu.
+
+Le texte ne doit pas indiquer le nombre de caractères, ne renvoie que la description, sans guillemets.
+`;
+
+    const { text } = await generateText({
+      model,
+      prompt,
+      //maxTokens: 80,
+    });
+
+    return text.trim()//.substring(0, 160);
+  } catch (error) {
+    console.warn("❌ Failed to generate description:", error);
+    return DEFAULT_SEO_DESCRIPTION;
+  }
+}
+
 async function enrichData(data: ParsedData): Promise<EnrichedData> {
   console.log(`🔄 Enriching data for: ${data.name || "Anonymous"}`);
 
-  const [seoTitle, seoDescription, h1Title] = await Promise.all([
+  const [seoTitle, seoDescription, h1Title, aiDescription] = await Promise.all([
     generateSeoTitle(data),
     generateSeoDescription(data),
     generateH1Title(data),
+    generateFullDescription(data)
   ]);
 
   return {
     ...data,
     seoTitle,
     seoDescription,
+    aiDescription,
     h1Title,
   };
 }

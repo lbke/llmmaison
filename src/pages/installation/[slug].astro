@@ -31,9 +31,8 @@ const randomInstallations = getRandomInstallations(10, slug as string);
 // Define options for choice components (you can expand these based on actual form options)
 const installLocationOptions = [
   "Directement sur ma machine",
-  "Sur un serveur local/réseau",
-  "Chez un prestataire cloud",
-  "Hybride",
+  "Sur un serveur hébergé localement (je paie pour le matériel avec une installation sur site ou chez un prestataire IT local)",
+  "Sur un cloud (je ne gère pas le matériel ou je le loue)",
 ];
 
 const professionalUseOptions = [
@@ -49,6 +48,8 @@ const trainingOptions = [
   "Non, j'utilise des modèles existants",
   "Les deux",
 ];
+
+console.log("INSTALL LOCATION", installation.installLocation);
 ---
 
 <Layout
@@ -108,6 +109,19 @@ const trainingOptions = [
             }
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-screen-md mx-auto px-4">
+      <h2 class="text-xl mt-8 mb-4">Résumé de cette installation par l'IA</h2>
+      <div class="text-sm text-gray-800">
+        {
+          installation.aiDescription
+            .split("\n")
+            .map((paragraph) => <p class="mb-4">{paragraph}</p>)
+        }
       </div>
     </div>
   </section>
@@ -254,16 +268,20 @@ const trainingOptions = [
         </div>
 
         <!-- Additional Information -->
-        <div>
-          <h2 class="text-2xl font-semibold text-gray-900 mb-6">
-            Informations complémentaires
-          </h2>
-          <StringResponse
-            field="additionalInfo"
-            label="Autres informations partagées"
-            value={installation.additionalInfo}
-          />
-        </div>
+        {
+          installation.additionalInfo && (
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+                Informations complémentaires
+              </h2>
+              <StringResponse
+                field="additionalInfo"
+                label="Autres informations partagées"
+                value={installation.additionalInfo}
+              />
+            </div>
+          )
+        }
 
         <!-- Photo section (commented out as requested) -->
         <!--

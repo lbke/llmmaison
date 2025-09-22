@@ -49,6 +49,7 @@ MISTRAL_API_KEY=votre_clé_mistral_ici
 NOTE: le slug = l'URL de l'installation est calculé à cette étape de manière déterministe
 
 ```bash
+mkdir ./data/processed/$(date +%F)
 npm run parse ./data/raw/$(date +%F).csv ./data/processed/$(date +%F)/parsed-data.csv
 ```
 Transforme le CSV brut en données avec des noms de champs propres et génère des slugs uniques.
