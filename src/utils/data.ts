@@ -71,7 +71,7 @@ function loadParsedDataAsEnriched(): EnrichedData[] {
   }));
 }
 
-export function getRandomInstallations(count: number = 10, exclude?: string): EnrichedData[] {
+export function getRandomInstallations(count: number = 64, exclude?: string): EnrichedData[] {
   const data = loadEnrichedData();
   const filtered = exclude ? data.filter(item => item.slug !== exclude) : data;
 

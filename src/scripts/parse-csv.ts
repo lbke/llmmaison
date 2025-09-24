@@ -8,16 +8,33 @@ import { readFileSync, writeFileSync } from 'fs';
 import { RawDataSchema, ParsedDataSchema, type RawData, type ParsedData } from '../schemas/data.js';
 
 /**
- * 
- * @param timestamp 2025/09/01 10:09:52 AM UTC+3
+ * @param timestamp If download from google forms : 2025/09/01 10:09:52 AM UTC+3
+ * If download from google sheets : may be in French !
  */
 function parseTimeStamp(timestamp: string) {
   const [datePart, timePart, ampm, tz] = timestamp.split(' ');
+  if (!tz) {
+    throw new Error("Download the CSV file from google forms, not sheets, to preserve tz in timestamps")
+    /*
+    // Date is already in French
+    const [day, month, year] = datePart.split('/').map(Number);
+    let [hour, minute, second] = timePart.split(':').map(Number);
+    // Use Date to get the offset for fr-FR (Europe/Paris)
+    // Create a date in UTC, then get the timezone offset for Europe/Paris
+    const tempDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+    // Get offset in minutes for Europe/Paris
+    const localeOffsetMinutes = -tempDate.toLocaleString('en-US', { timeZone: 'Europe/Paris', hour12: false, hour: '2-digit' }).split(':')[0] + hour;
+    const offsetHours = Number(localeOffsetMinutes);
+    const date = new Date(Date.UTC(year, month - 1, day, hour + offsetHours, minute, second));
+    return date
+    */
+  }
+  // Date is not localized
   const [year, month, day] = datePart.split('/').map(Number);
   let [hour, minute, second] = timePart.split(':').map(Number);
   if (ampm === 'PM' && hour < 12) hour += 12;
   if (ampm === 'AM' && hour === 12) hour = 0;
-  const tzOffset = tz.match(/UTC([+-]\d+)/);
+  const tzOffset = tz && tz.match(/UTC([+-]\d+)/);
   const offsetHours = tzOffset ? Number(tzOffset[1]) : 0;
   const date = new Date(Date.UTC(year, month - 1, day, hour - offsetHours, minute, second));
   return date
@@ -31,7 +48,6 @@ function createSlug(timestamp: string, name?: string): string {
   const date = parseTimeStamp(timestamp)
   // console.log(timestamp)
   // const date = new Date(timestamp.split(' ')[0].split('/').reverse().join('-') + 'T' + timestamp.split(' ')[1]);
-  console.log(date)
   const isoString = date.toISOString();
   const beginning = isoString.split('Z')[0]
   const dateSlug = beginning.replaceAll(/[:.]/g, '-').replace(/T/, '-');
