@@ -7,7 +7,7 @@ import { Image } from "astro:assets";
 // import landingCoverVertical from "../assets/img/llm_jardin.png";
 import landingCover from "../assets/img/llm_jardin_cover.png";
 
-const randomInstallations = getRandomInstallations(64);
+const randomInstallations = getRandomInstallations(6);
 ---
 
 <Layout
@@ -104,11 +104,34 @@ const randomInstallations = getRandomInstallations(64);
 
       {
         randomInstallations.length > 0 ? (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {randomInstallations.map((installation) => (
-              <InstallationCard installation={installation} />
-            ))}
-          </div>
+          <>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {randomInstallations.map((installation) => (
+                <InstallationCard installation={installation} />
+              ))}
+            </div>
+            <div class="text-center">
+              <a
+                href="/installations"
+                class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Voir toutes les installations
+                <svg
+                  class="w-5 h-5 ml-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            </div>
+          </>
         ) : (
           <div class="text-center py-12">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">

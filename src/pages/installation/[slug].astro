@@ -24,7 +24,7 @@ if (!installation) {
   return Astro.redirect("/404");
 }
 
-const randomInstallations = getRandomInstallations(10, slug as string);
+const randomInstallations = getRandomInstallations(3, slug as string);
 
 // Be careful that all options might not be listed here since the app was generated based on possible answers
 
@@ -312,10 +312,29 @@ const trainingOptions = [
             <h2 class="text-3xl font-bold text-gray-900 mb-4">
               Autres installations de la communauté
             </h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-              Découvrez d'autres configurations partagées par la communauté LLM
-              française.
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+              Découvrez quelques autres configurations partagées par la
+              communauté LLM française.
             </p>
+            <a
+              href="/installations"
+              class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors mb-8"
+            >
+              Voir toutes les installations
+              <svg
+                class="w-5 h-5 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </a>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

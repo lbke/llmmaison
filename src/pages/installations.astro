@@ -1,0 +1,140 @@
+---
+import Layout from "../layouts/Layout.astro";
+import InstallationCard from "../components/InstallationCard.astro";
+import ContributeBanner from "../components/ContributeBanner.astro";
+import { getAllInstallations, parseTimestamp } from "../utils/data.js";
+
+const allInstallations = getAllInstallations();
+---
+
+<Layout
+    title="Toutes les installations LLM - LLM Maison 2025"
+    description="Explorez toutes les installations LLM partagées par la communauté française. Configuration locale, cloud, matériel, coûts et retours d'expérience."
+>
+    <!-- Header Banner -->
+    <section
+        class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12"
+    >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">
+                    Toutes les installations LLM de la communauté
+                </h1>
+                <p class="text-lg opacity-90 max-w-3xl mx-auto">
+                    Découvrez l'intégralité des configurations LLM partagées par
+                    la communauté francophone. Matériel, logiciels, performances
+                    et coûts détaillés pour chaque installation.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="py-12 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="prose prose-lg text-gray-700 space-y-4">
+                <p class="text-xl leading-relaxed">
+                    Découvrez <strong
+                        >{allInstallations.length} installations LLM en auto-hébergement</strong
+                    >
+                    documentées par la communauté française. Chaque installation
+                    est une source précieuse d'informations sur les choix technologiques,
+                    les performances obtenues et les coûts réels de l'auto-hébergement
+                    d'intelligences artificielles génératives (LLM).
+                </p>
+                <p>
+                    Que vous soyez débutant ou expert, ces retours d'expérience
+                    vous aideront à investir intelligement dans votre
+                    infrastructure LLM.
+                </p>
+                <p>
+                    L'Agence LLM remercie les contributeurs qui partagent leurs
+                    expériences et rendent cette cartographie collaborative
+                    possible. Cette démarche contribue à une IA française plus
+                    souveraine et efficace.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installations Grid -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {
+                allInstallations.length > 0 ? (
+                    <>
+                        <div class="text-center mb-12">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                                {allInstallations.length}
+                                {allInstallations.length > 1
+                                    ? "installations"
+                                    : "installation"}{" "}
+                                {allInstallations.length > 1
+                                    ? "documentées"
+                                    : "documentée"}
+                            </h2>
+                            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                                Cliquez sur une installation pour découvrir tous
+                                les détails techniques, les performances et
+                                l'expérience partagée par son utilisateur.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {allInstallations.map((installation) => (
+                                <InstallationCard installation={installation} />
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                    <div class="text-center py-12">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                            <svg
+                                class="w-8 h-8 text-gray-400"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">
+                            Aucune installation disponible
+                        </h3>
+                        <p class="text-gray-500 mb-6">
+                            Les données sont en cours de traitement. Soyez le
+                            premier à contribuer !
+                        </p>
+                        <a
+                            href="https://forms.gle/fdvdKHNFPefLySnU6"
+                            target="_blank"
+                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                        >
+                            Partager votre installation
+                            <svg
+                                class="w-5 h-5 ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+                )
+            }
+        </div>
+    </section>
+    <!-- Contribute Banner -->
+    <ContributeBanner />
+</Layout>

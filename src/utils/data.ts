@@ -88,3 +88,11 @@ export function getAllSlugs(): string[] {
   const data = loadEnrichedData();
   return data.map(item => item.slug);
 }
+
+export function getAllInstallations(): EnrichedData[] {
+  const data = loadEnrichedData();
+  return data.sort((a, b) => {
+    // Sort by timestamp (most recent first)
+    return parseTimestamp(b.timestamp).getTime() - parseTimestamp(a.timestamp).getTime();
+  });
+}
